@@ -59,12 +59,6 @@ routes/        Định nghĩa API
 middleware/    authen (JWT), upload (Multer)
 ```
 
-## 🌐 Deploy lên Render
-1. Tạo Web Service từ repository (Build: `npm install`, Start: `npm start`).
-2. Điền **đầy đủ** các biến env ở trên vào dashboard Render.
-3. Đảm bảo MongoDB Atlas cho phép IP truy cập (Network Access → Allow from anywhere).
-4. Link production: https://courtify-backend-fwe5.onrender.com
-
 ## 🔒 Bảo mật
 - Không bao giờ commit file `.env` lên repository công khai.
 - Đổi `JWT_SECRET` thành chuỗi ngẫu nhiên dài để bảo vệ token.
