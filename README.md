@@ -31,7 +31,7 @@ RESTful API cho nền tảng đặt sân thể thao Courtify. Xây dựng bằng
 
    **C. CORS**
    - `CORS_ORIGIN` — Danh sách domain frontend được phép gọi API, cách nhau dấu phẩy.
-     VD: `http://localhost:3000,https://courtify-booking.vercel.app`
+     VD: `http://localhost:3000,<domain frontend khi deploy>`
 
    **D. Cloudinary (upload ảnh)**
    - Lấy tại: Cloudinary Dashboard
