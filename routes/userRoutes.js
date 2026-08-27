@@ -3,12 +3,13 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const authen = require('../middleware/authen');
 
-router.get('/', userController.getAllUsers);
+// Admin: yêu cầu đăng nhập để xem danh sách/khóa/mở khóa người dùng
+router.get('/', authen, userController.getAllUsers);
 router.get('/profile', authen, userController.getProfile);
-router.get('/:id', userController.getUserById);
+router.get('/:id', authen, userController.getUserById);
 router.put('/:id', authen, userController.updateUser);
-router.put('/:id/lock', userController.lockUser);
-router.put('/:id/unlock', userController.unlockUser);
+router.put('/:id/lock', authen, userController.lockUser);
+router.put('/:id/unlock', authen, userController.unlockUser);
 
 router.post('/register', userController.register);
 router.post('/login', userController.login);

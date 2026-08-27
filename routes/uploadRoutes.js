@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { upload, uploadToCloudinary } = require('../middleware/uploadMiddleware');
+const authen = require('../middleware/authen');
 
-// POST /api/upload/single - Upload 1 ảnh đại diện/thumbnail
-router.post('/single', upload.single('image'), async (req, res) => {
+// POST /api/upload/single - Upload 1 ảnh đại diện/thumbnail (yêu cầu đăng nhập)
+router.post('/single', authen, upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ success: false, message: 'Vui lòng chọn 1 file ảnh' });
@@ -22,8 +23,8 @@ router.post('/single', upload.single('image'), async (req, res) => {
   }
 });
 
-// POST /api/upload/multiple - Upload nhiều ảnh 
-router.post('/multiple', upload.array('images', 10), async (req, res) => {
+// POST /api/upload/multiple - Upload nhiều ảnh (yêu cầu đăng nhập)
+router.post('/multiple', authen, upload.array('images', 10), async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ success: false, message: 'Vui lòng chọn ít nhất 1 file ảnh' });

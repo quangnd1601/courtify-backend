@@ -4,6 +4,10 @@ const bcrypt = require('bcryptjs');
 
 const getAllUsers = async (req, res, next) => {
   try {
+    // Chỉ ADMIN mới xem được danh sách người dùng
+    if (req.user.role !== 'ADMIN') {
+      return res.status(403).json({ message: 'Quyền truy cập bị từ chối' });
+    }
     const users = await UserService.getAll();
     res.status(200).json({ users: users });
   } catch (error) {
@@ -94,6 +98,10 @@ const updateUser = async (req, res, next) => {
 
 const lockUser = async (req, res, next) => {
   try {
+    // Chỉ ADMIN mới khóa được người dùng
+    if (req.user.role !== 'ADMIN') {
+      return res.status(403).json({ message: 'Quyền truy cập bị từ chối' });
+    }
     const userId = req.params.id;
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: "ID không hợp lệ" });
@@ -111,6 +119,10 @@ const lockUser = async (req, res, next) => {
 
 const unlockUser = async (req, res, next) => {
   try {
+    // Chỉ ADMIN mới mở khóa được người dùng
+    if (req.user.role !== 'ADMIN') {
+      return res.status(403).json({ message: 'Quyền truy cập bị từ chối' });
+    }
     const userId = req.params.id;
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: "ID không hợp lệ" });
