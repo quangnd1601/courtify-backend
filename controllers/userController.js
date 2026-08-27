@@ -21,6 +21,7 @@ const getUserById = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({ message: "Không tìm thấy người dùng" });
     }
+    user.password = undefined; // KHÔNG trả password ra ngoài API
     res.status(200).json({ user: user });
   } catch (error) {
     res.status(500).json({ message: "Lỗi server", error: error.message });
@@ -101,6 +102,7 @@ const lockUser = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({ message: "Không tìm thấy người dùng" });
     }
+    user.password = undefined; // KHÔNG trả password ra ngoài API
     res.status(200).json({ success: true, message: "Khóa người dùng thành công", user });
   } catch (error) {
     res.status(500).json({ message: "Lỗi server", error: error.message });
@@ -117,6 +119,7 @@ const unlockUser = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({ message: "Không tìm thấy người dùng" });
     }
+    user.password = undefined; // KHÔNG trả password ra ngoài API
     res.status(200).json({ success: true, message: "Mở khóa người dùng thành công", user });
   } catch (error) {
     res.status(500).json({ message: "Lỗi server", error: error.message });

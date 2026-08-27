@@ -3,7 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const getAll = async () => {
-  return await User.find({});
+  // KHÔNG trả password ra ngoài API
+  return await User.find({}).select('-password');
 };
 
 const getOne = async (id) => {
@@ -50,7 +51,9 @@ const register = async (userData) => {
     role: 'CUSTOMER'
   });
 
-  return await newUser.save();
+  const savedUser = await newUser.save();
+  savedUser.password = undefined; // KHÔNG trả password ra ngoài API
+  return savedUser;
 };
 
 const login = async (email, password) => {
@@ -60,6 +63,9 @@ const login = async (email, password) => {
     if (user.status === 'BANNED') {
       throw new Error('Tài khoản của bạn đã bị khóa');
     }
+
+    // KHÔNG nhúng password vào token JWT và response
+    user.password = undefined;
 
     const access_token = jwt.sign({ user }, process.env.JWT_SECRET, {
       expiresIn: 15 * 60,
