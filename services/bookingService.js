@@ -134,7 +134,7 @@ const createBooking = async (bookingData) => {
 };
 
 const getMyBookings = async (userId) => {
-  return await Booking.find({ user_id: userId })
+  const bookings = await Booking.find({ user_id: userId })
     .populate({
       path: 'details.court_id',
       select: 'court_name sport_center_id price peak_price',
@@ -151,6 +151,30 @@ const getMyBookings = async (userId) => {
     .populate('services.service_id', 'service_name price')
     .populate('voucher_id', 'code discount_type discount_value')
     .sort({ created_at: -1 });
+
+  // Gắn thêm thông tin thanh toán (cho khách xem trạng thái đã thanh toán chưa)
+  const bookingIds = bookings.map((b) => b._id);
+  const payments = await Payment.find({ booking_id: { $in: bookingIds } });
+  const paymentMap = {};
+  payments.forEach((p) => {
+    paymentMap[p.booking_id.toString()] = p;
+  });
+
+  return bookings.map((b) => {
+    const doc = b.toObject();
+    const p = paymentMap[b._id.toString()];
+    doc.payment = p
+      ? {
+          order_code: p.order_code,
+          payment_provider: p.payment_provider,
+          payment_status: p.payment_status,
+          paid_amount: p.paid_amount,
+          paid_at: p.paid_at,
+          refund_note: p.refund_note,
+        }
+      : null;
+    return doc;
+  });
 };
 
 const getAllBookings = async () => {
